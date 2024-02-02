@@ -1,25 +1,52 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useState } from "react";
+import { useEffect } from "react";
 
-function App() {
+export default function App() {
+  const [iniData, setIniData] = useState([]);
+  const [meaning, setMeaning] = useState("");
+
+  const data = [
+    {
+      word: "React",
+      meaning: "A JavaScript library for building user interfaces.",
+    },
+    { word: "Component", meaning: "A reusable building block in React." },
+    { word: "State", meaning: "An object that stores data for a component." },
+  ];
+
+  const findWord = (word) => {
+    let meaning = "";
+    iniData.forEach((w) => {
+      if (w.word.toLowerCase() === word) {
+        meaning = w.meaning;
+      }
+    });
+
+    if (meaning === "") {
+      meaning = "Word not found in the dictionary.";
+    }
+    setMeaning(meaning);
+  };
+
+  useEffect(() => {
+    setIniData(data);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Dictionary App</h1>
+      <form
+        onSubmit={(e) => (
+          // eslint-disable-next-line no-sequences
+          e.preventDefault(), findWord(e.target.word.value.toLowerCase())
+        )}
+      >
+        <input name="word" type="text" placeholder="Search for a word" />
+        <button type="submit">Search</button>
+      </form>
+      <div style={{ fontWeight: "bold" }}>Definition:</div>
+      <div style={{ marginTop: "20px", marginBottom: "20px" }}>{meaning}</div>
     </div>
   );
 }
-
-export default App;
